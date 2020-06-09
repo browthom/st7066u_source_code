@@ -11,3 +11,5 @@ http://www.newhavendisplay.com/specs/NHD-0208AZ-RN-YBW-33V.pdf
 
 # LCD Module:
 https://www.newhavendisplay.com/nhd0208azrnybw33v-p-5156.html
+
+*Most recent code update: 6/9/2020*
