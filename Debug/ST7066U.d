@@ -16,6 +16,7 @@ ST7066U.obj: C:/ti/ccsv8/ccs_base/arm/include/CMSIS/core_cm4.h
 ST7066U.obj: C:/ti/ccsv8/ccs_base/arm/include/CMSIS/cmsis_compiler.h
 ST7066U.obj: C:/ti/ccsv8/ccs_base/arm/include/CMSIS/cmsis_ccs.h
 ST7066U.obj: C:/ti/ccsv8/ccs_base/arm/include/system_msp432p401r.h
+ST7066U.obj: ../ST7066U.h
 
 ../ST7066U.c: 
 C:/ti/ccsv8/ccs_base/arm/include/msp432.h: 
@@ -33,3 +34,4 @@ C:/ti/ccsv8/ccs_base/arm/include/CMSIS/core_cm4.h:
 C:/ti/ccsv8/ccs_base/arm/include/CMSIS/cmsis_compiler.h: 
 C:/ti/ccsv8/ccs_base/arm/include/CMSIS/cmsis_ccs.h: 
 C:/ti/ccsv8/ccs_base/arm/include/system_msp432p401r.h: 
+../ST7066U.h: 

@@ -14,6 +14,60 @@
  *
  */
 #include "msp432.h"
+#include "ST7066U.h"
+
+/**
+ *  Write to display when it is in 2-line mode
+ */
+void write_to_display(uint8_t* line_1, uint8_t* line_2) {
+    // set DDRAM address
+    command(0x80);                  // 1000 0000
+
+    int i = 7, j=0;
+
+    for (i = 7; i >= 0; i--) {
+        // Delay 160us; count=48
+        for(j=0;j<48;j++);
+        write(*line_1);
+        line_1++;
+    }
+
+    for(j=0;j<48;j++);
+
+    // set DDRAM address
+    command(0xC0);                  // 1100 0000
+
+    for (i = 7; i >= 0; i--) {
+        // Delay 160us; count=48
+        for(j=0;j<48;j++);
+        write(*line_2);
+        line_2++;
+    }
+}
+
+/**
+ * Sends a command byte to the driver
+ */
+void command(uint8_t byte) {
+
+    // Configure the data lines as outputs
+    P4->DIR = 0xFF;
+    // Configure the data lines as outputs
+    P4->OUT = byte;
+
+    // RS=0 -> Send Instruction
+    P5->OUT &= ~BIT0;
+    // R/W=0 -> Write to ST7066U
+    P5->OUT &= ~BIT1;
+
+    // E=1 -> Enable bit
+    P5->OUT |= BIT2;
+    // Delay >= 1us; count=300
+    int i = 0;
+    for (i=0; i<300; i++);
+    // E=0 -> Enable bit set to 0
+    P5->OUT &= ~BIT2;
+}
 
 /**
  *  Initialize ST7066U for interface with MSP432
@@ -31,11 +85,11 @@ void init_st7066u() {
 
     // E=0 -> Enable bit set to 0
     P5->OUT &= ~BIT2;
-    // Delay >40ms; count=120,000
+    // Delay >40ms; count=120,00
     for(i=0;i<12000;i++);
     // Wake up (Function set DL=1; 8 bits)
     command(0x30);          // 0011 0000
-    // Delay 5ms; count=15,000
+    // Delay 5ms; count=15,00
     for(i=0;i<1500;i++);
     // Wake up #2
     command(0x30);          // 0011 0000
@@ -61,56 +115,7 @@ void init_st7066u() {
     command(0x06);          // 0000 0110
 }
 
-/**
- *  Write to display when it is in 2-line mode
- */
-void write_to_display(uint8_t* line_1, uint8_t* line_2) {
-    // set DDRAM address
-    command(0x80);                  // 1000 0000
 
-    int i = 7, j=0;
-
-    for (i = 7; i >= 0; i--) {
-        for(j=0;j<48;j++);
-        write(*line_1);
-        line_1++;
-    }
-
-    for(j=0;j<48;j++);
-
-    // set DDRAM address
-    command(0xC0);                  // 1100 0000
-
-    for (i = 7; i >= 0; i--) {
-        for(j=0;j<48;j++);
-        write(*line_2);
-        line_2++;
-    }
-}
-
-/**
- * Sends a command byte to the driver
- */
-void command(uint8_t byte) {
-
-    // Configure the data lines as outputs
-    P4->DIR = 0xFF;
-    // Configure the data lines as outputs
-    P4->OUT = byte;
-
-    // RS=0 -> Send Instruction
-    P5->OUT &= ~BIT0;
-    // R/W=0 -> Write to ST7066U
-    P5->OUT &= ~BIT1;
-
-    // E=1 -> Enable bit
-    P5->OUT |= BIT2;
-    // Delay >= 300ns; count=1500
-    int i = 0;
-    for (i=0; i<300; i++);
-    // E=0 -> Enable bit set to 0
-    P5->OUT &= ~BIT2;
-}
 
 
 /**
@@ -155,7 +160,7 @@ uint8_t read() {
     // Delay >= 1us; count=300
     int i = 0;
     for (i=0; i<300; i++);
-    int byte = P4->IN;
+    uint8_t byte = P4->IN;
     // Disable bit
     P5->OUT &= ~BIT2;
 
@@ -262,6 +267,6 @@ void set_ddram_address(uint8_t addr) {
 /**
  *  Read busy flag (data bus bit 7) and contents of AC
  */
-void read_busy_flag(uint8_t addr) {
-    read(addr);
-}
+//uint8_t read_busy_flag(uint8_t addr) {
+//    return read(addr);
+//}

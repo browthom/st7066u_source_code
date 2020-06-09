@@ -117,7 +117,7 @@ void set_ddram_address(uint8_t addr);
 /**
  *  Read busy flag (data bus bit 7) and contents of AC
  */
-void read_busy_flag(uint8_t addr);
+// void read_busy_flag(uint8_t addr);
 
 
 #endif /* ST7066U_H_ */
